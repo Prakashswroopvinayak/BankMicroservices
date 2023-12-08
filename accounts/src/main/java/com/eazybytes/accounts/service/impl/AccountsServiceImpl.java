@@ -32,18 +32,11 @@ public class AccountsServiceImpl implements IAccountService {
     public void createAccount(CustomerDto customerDto){
 
         Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
-        customer.setCreatedBy("Anonymous");
-        customer.setCreatedAt(LocalDateTime.now());
-        System.out.println("@@ " +customer.getCreatedAt());
-        System.out.println("@@ " +customer.getCreatedBy());
-        System.out.println("@@ " +customer);
-
         Optional<Customer> optionalCustomer = customerRepository.findByMobileNumber(customerDto.getMobileNumber());
         if(optionalCustomer.isPresent()){
             throw  new CustomerAlreadyExistsException("Customer already register with given mobile number" +customerDto.getMobileNumber());
         }
         Customer savedCustomer = customerRepository.save(customer);
-        System.out.println("@@ " +savedCustomer);
         accountsRepository.save(createNesAccount(savedCustomer));
 
 
@@ -58,11 +51,6 @@ public class AccountsServiceImpl implements IAccountService {
         newAccount.setAccountNumber(randomAccNumber);
         newAccount.setBranchAddress(AccountsConstants.ADDRESS);
         newAccount.setAccountType(AccountsConstants.SAVINGS);
-        newAccount.setCreatedBy("Anonymous");
-        newAccount.setCreatedAt(LocalDateTime.now());
-        System.out.println("@@ " +newAccount);
-        System.out.println("@@ " +newAccount.getCreatedAt());
-        System.out.println("@@ " +newAccount.getCreatedBy());
         return newAccount;
     }
 
