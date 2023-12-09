@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository  //  behind the scene spring data jpa will create a bean implementation based upon configuration we provide
 public interface CustomerRepository extends JpaRepository<Customer,Long> {
     Optional<Customer> findByMobileNumber(String mobileNumber);
+
+
 }
