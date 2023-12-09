@@ -4,7 +4,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb2
+    url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
     username: pranik
     password: pranik
