@@ -4,10 +4,10 @@ import com.eazybytes.loans.loans.dto.LoanDto;
 
 public interface ILoanService {
 
-    String createLoan(String mobileNumber);
-    LoanDto fetchLoan(String mobileNumber);
+     public void createLoan(String mobileNumber);
+    public LoanDto fetchLoan(String mobileNumber);
 
-    Boolean updateLoanDetails(LoanDto loanDto);
+    public Boolean updateLoanDetails(LoanDto loanDto);
 
-    String deleteLoanDetails(String mobileNumber);
+    public Boolean deleteLoanDetails(String mobileNumber);
 }
