@@ -1,7 +1,10 @@
 package com.eazybytes.loans.loans.service.impl;
 
+import com.eazybytes.loans.loans.constants.LoansConstants;
 import com.eazybytes.loans.loans.dto.LoanDto;
 import com.eazybytes.loans.loans.entity.Loan;
+import com.eazybytes.loans.loans.exception.LoanAlreadyExistsException;
+import com.eazybytes.loans.loans.exception.ResourceNotFoundException;
 import com.eazybytes.loans.loans.mapper.LoanMapper;
 import com.eazybytes.loans.loans.repository.LoanRepository;
 import com.eazybytes.loans.loans.service.ILoanService;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @Component
@@ -19,29 +23,35 @@ public class LoanServiceImpl implements ILoanService {
 
     LoanRepository loanRepository;
     @Override
-    public String createLoan(String mobileNumber) {
-        System.out.println(" in loan service");
+    public void createLoan(String mobileNumber) {
+        Optional<Loan> loan = loanRepository.findByMobileNumber(mobileNumber);
+        if(loan.isPresent()){
+            throw  new LoanAlreadyExistsException("Loan", "Mobile Number", mobileNumber);
+        }
+        loanRepository.save(ceateLoanByMobileNumber(mobileNumber));
+
+    }
+
+    private Loan ceateLoanByMobileNumber(String mobileNumber){
         Loan loan = new Loan();
-        loan.setLoanNumber("1st");
-        loan.setLoanType("Personal");
-        loan.setTotalLoan(1000000);
+        long randomLoanNumber = 100000000000L + new Random().nextInt(900000000);
+        loan.setLoanNumber(Long.toString(randomLoanNumber));
+        loan.setLoanType(LoansConstants.HOME_LOAN);
+        loan.setTotalLoan(LoansConstants.NEW_LOAN_LIMIT);
         loan.setMobileNumber(mobileNumber);
         loan.setCreatedBy("Admin");
         loan.setCreatedAt(LocalDateTime.now());
         loan.setAmountPaid(0);
-        loan.setOutstandingAmount(100);
-
-        loanRepository.save(loan);
-        return "Loan created succesful";
-
+        loan.setOutstandingAmount(LoansConstants.NEW_LOAN_LIMIT);
+        return loan;
     }
 
     @Override
     public LoanDto fetchLoan(String mobileNumber) {
-
         Loan loan = loanRepository.findByMobileNumber(mobileNumber).orElseThrow(
-                ()-> new RuntimeException("Loan does not exit ")
+                ()-> new ResourceNotFoundException("Loan","Mobile Number",mobileNumber)
         );
+
         return LoanMapper.mapToLoanDto(loan,new LoanDto());
 
     }
@@ -50,10 +60,8 @@ public class LoanServiceImpl implements ILoanService {
     public Boolean updateLoanDetails(LoanDto loanDto) {
         Boolean isUpdated = false;
         String mobileNumber = loanDto.getMobileNumber();
-        System.out.println(loanDto);
-        System.out.println("Mobile Number "+mobileNumber);
         Loan loan = loanRepository.findByMobileNumber(mobileNumber).orElseThrow(
-                ()-> new RuntimeException("Loan doesnot exist with given number")
+                ()-> new ResourceNotFoundException("Loan", "Mobile Number", mobileNumber)
         );
 
         LoanMapper.mapToLoan(loanDto,loan);
@@ -63,13 +71,14 @@ public class LoanServiceImpl implements ILoanService {
     }
 
     @Override
-    public String deleteLoanDetails(String mobileNumber) {
-
+    public Boolean deleteLoanDetails(String mobileNumber) {
+        Boolean isDeleted = false;
         Loan loan = loanRepository.findByMobileNumber(mobileNumber).orElseThrow(
-                ()-> new RuntimeException("Loan is not available for this mobile number")
+                ()-> new ResourceNotFoundException("Loan","Mobile Number",mobileNumber)
         );
 
         loanRepository.deleteByMobileNumber(mobileNumber);
-        return "Account deleted successfully ";
+        isDeleted = true;
+        return isDeleted;
     }
 }

@@ -18,4 +18,5 @@ public interface LoanRepository extends JpaRepository<Loan,Long> {
    @Transactional
    void deleteByMobileNumber(String mobileNumber);
 
+
 }
