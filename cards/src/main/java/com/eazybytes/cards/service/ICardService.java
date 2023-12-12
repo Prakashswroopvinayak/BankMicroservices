@@ -7,4 +7,5 @@ public interface ICardService {
     public void createCard(String mobileNumber);
 
     public CardDto fetchCard(String mobileNumber);
+    public Boolean updateCard(CardDto cardDto);
 }

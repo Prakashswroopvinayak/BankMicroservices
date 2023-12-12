@@ -45,6 +45,8 @@ public class CardServiceImpl implements ICardService {
         return CardMapper.mapToCardDto(card, new CardDto());
     }
 
+
+
     public Card createNewCard(String mobileNumber){
 
         Card card = new Card();
@@ -60,6 +62,17 @@ public class CardServiceImpl implements ICardService {
         card.setUpdatedBy("Prakash");
         cardRepository.save(card);
         return card;
+    }
+    @Override
+    public Boolean updateCard(CardDto cardDto) {
+        Boolean isUpdated = false;
+        Card card = cardRepository.findByMobileNumber(cardDto.getMobileNumber()).orElseThrow(
+                () ->  new ResourceNotFoundException("Card","Mobile Number", cardDto.getCardNumber())
+        );
+
+        cardRepository.save(CardMapper.mapToCard(cardDto, card));
+        isUpdated = true;
+        return isUpdated;
     }
 
 }
