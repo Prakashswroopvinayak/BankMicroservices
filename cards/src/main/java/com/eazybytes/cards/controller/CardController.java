@@ -51,4 +51,22 @@ public class CardController {
         }
 
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseDto> deleteCard(@RequestParam String mobileNumber){
+        Boolean isDeleted = cardServiceImpl.deleteCard(mobileNumber);
+
+        if(isDeleted){
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDto("200", "Deleted succesfully"));
+        }else{
+
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDto("417","Expectation failed"));
+        }
+
+
+    }
 }

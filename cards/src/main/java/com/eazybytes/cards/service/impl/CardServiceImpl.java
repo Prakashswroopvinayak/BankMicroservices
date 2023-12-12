@@ -75,4 +75,17 @@ public class CardServiceImpl implements ICardService {
         return isUpdated;
     }
 
+    @Override
+    public Boolean deleteCard(String mobileNumber) {
+       Boolean isDeleted = false;
+       Card card = cardRepository.findByMobileNumber(mobileNumber).orElseThrow(
+               ()-> new ResourceNotFoundException("Card", "Mobile Number", mobileNumber)
+       );
+
+       cardRepository.delete(card);
+       isDeleted = true;
+       return isDeleted;
+    }
+
+
 }
