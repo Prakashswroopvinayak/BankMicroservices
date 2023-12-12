@@ -37,4 +37,18 @@ public class CardController {
                 .body(cardDto);
 
     }
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDto> updateCard(@RequestBody CardDto cardDto){
+        Boolean isUpdated = cardServiceImpl.updateCard(cardDto);
+        if(isUpdated){
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDto("201","Updated SuccesFull"));
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDto("417","Updation request failed"));
+        }
+
+    }
 }
