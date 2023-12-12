@@ -1,6 +1,7 @@
 package com.eazybytes.cards.controller;
 
 
+import com.eazybytes.cards.constant.CardConstant;
 import com.eazybytes.cards.dto.CardDto;
 import com.eazybytes.cards.dto.ResponseDto;
 import com.eazybytes.cards.service.ICardService;
@@ -25,7 +26,7 @@ public class CardController {
         cardServiceImpl.createCard(mobileNumber);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new ResponseDto("200","Card Created succesfull"));
+                .body(new ResponseDto(CardConstant.STATUS_201,CardConstant.MESSAGE_201));
     }
 
     @GetMapping("/fetch")
@@ -43,11 +44,11 @@ public class CardController {
         if(isUpdated){
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(new ResponseDto("201","Updated SuccesFull"));
+                    .body(new ResponseDto(CardConstant.STATUS_200,CardConstant.MESSAGE_200));
         }else{
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
-                    .body(new ResponseDto("417","Updation request failed"));
+                    .body(new ResponseDto(CardConstant.STATUS_417,CardConstant.MESSAGE_417_UPDATE));
         }
 
     }
@@ -59,12 +60,12 @@ public class CardController {
         if(isDeleted){
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(new ResponseDto("200", "Deleted succesfully"));
+                    .body(new ResponseDto(CardConstant.STATUS_200, CardConstant.MESSAGE_200));
         }else{
 
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
-                    .body(new ResponseDto("417","Expectation failed"));
+                    .body(new ResponseDto(CardConstant.STATUS_417,CardConstant.MESSAGE_417_DELETE));
         }
 
 

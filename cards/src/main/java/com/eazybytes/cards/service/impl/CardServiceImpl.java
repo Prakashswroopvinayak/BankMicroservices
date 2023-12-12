@@ -1,6 +1,7 @@
 package com.eazybytes.cards.service.impl;
 
 
+import com.eazybytes.cards.constant.CardConstant;
 import com.eazybytes.cards.dto.CardDto;
 import com.eazybytes.cards.entity.Card;
 import com.eazybytes.cards.exception.ResourceNotFoundException;
@@ -35,6 +36,24 @@ public class CardServiceImpl implements ICardService {
 
     }
 
+
+    public Card createNewCard(String mobileNumber){
+
+        Card card = new Card();
+        Long randomCardNumber = 1000000000L + new Random().nextInt(900000000);
+
+        card.setCardNumber(randomCardNumber.toString());
+        card.setCardType(CardConstant.CREDIT_CARD);
+        card.setAmountUsed(10000L);
+        card.setTotalLimit(CardConstant.NEW_CARD_LIMIT);
+        card.setAvailableAmount(90000L);
+        card.setMobileNumber(mobileNumber);
+        card.setUpdatedAt(LocalDateTime.now());
+        card.setUpdatedBy("Prakash");
+        cardRepository.save(card);
+        return card;
+    }
+
     @Override
     public CardDto fetchCard(String mobileNumber) {
 
@@ -43,25 +62,6 @@ public class CardServiceImpl implements ICardService {
         );
 
         return CardMapper.mapToCardDto(card, new CardDto());
-    }
-
-
-
-    public Card createNewCard(String mobileNumber){
-
-        Card card = new Card();
-        Long randomCardNumber = 1000000000L + new Random().nextInt(900000000);
-
-        card.setCardNumber(randomCardNumber.toString());
-        card.setCardType("Credit card");
-        card.setAmountUsed(100000L);
-        card.setTotalLimit(200000L);
-        card.setAvailableAmount(100000L);
-        card.setMobileNumber(mobileNumber);
-        card.setUpdatedAt(LocalDateTime.now());
-        card.setUpdatedBy("Prakash");
-        cardRepository.save(card);
-        return card;
     }
     @Override
     public Boolean updateCard(CardDto cardDto) {
