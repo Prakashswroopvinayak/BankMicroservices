@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,7 @@ public class Card extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO,generator="native")
     @GenericGenerator(name="native",strategy = "native")
     private Long cardId;
+
 
 
     private String mobileNumber;
