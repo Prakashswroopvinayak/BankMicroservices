@@ -12,7 +12,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,11 +28,15 @@ import org.springframework.web.bind.annotation.*;
 public class LoansController {
 
    private ILoanService loanServiceImpl;
+    @Value("${build.version}")
+    private String buildVersion;
+
+    @Autowired
+    private Environment environment;
    public LoansController(ILoanService loanServiceImpl){
        this.loanServiceImpl = loanServiceImpl;
    }
-   @Value("${build.version}")
-   private String buildVersion;
+
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createAccount(@Valid @RequestParam
                                                          @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digit")
@@ -89,5 +95,12 @@ public class LoansController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(buildVersion);
+    }
+
+    @GetMapping("/java-version")
+    public ResponseEntity<String> getJavaVersion(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(environment.getProperty("JAVA_HOME"));
     }
 }
