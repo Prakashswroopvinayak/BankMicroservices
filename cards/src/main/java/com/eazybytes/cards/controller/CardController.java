@@ -3,6 +3,7 @@ package com.eazybytes.cards.controller;
 
 import com.eazybytes.cards.constant.CardConstant;
 import com.eazybytes.cards.dto.CardDto;
+import com.eazybytes.cards.dto.CardsContactInfoDto;
 import com.eazybytes.cards.dto.ResponseDto;
 import com.eazybytes.cards.service.ICardService;
 import jakarta.validation.Valid;
@@ -33,6 +34,9 @@ public class CardController {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private CardsContactInfoDto cardsContactInfoDto;
     public CardController(ICardService cardServiceImpl){
         this.cardServiceImpl = cardServiceImpl;
     }
@@ -106,5 +110,13 @@ public class CardController {
         return  ResponseEntity
                 .status(HttpStatus.OK)
                 .body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<CardsContactInfoDto> getContactInfo(){
+
+        return  ResponseEntity
+                .status(HttpStatus.OK)
+                .body(cardsContactInfoDto);
     }
 }

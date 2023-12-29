@@ -2,10 +2,7 @@ package com.eazybytes.accounts.controller;
 
 
 import com.eazybytes.accounts.constants.AccountsConstants;
-import com.eazybytes.accounts.dto.AccountsDto;
-import com.eazybytes.accounts.dto.CustomerDto;
-import com.eazybytes.accounts.dto.ErrorResponseDto;
-import com.eazybytes.accounts.dto.ResponseDto;
+import com.eazybytes.accounts.dto.*;
 import com.eazybytes.accounts.service.IAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -48,6 +45,9 @@ public class AccountController {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private AccountsContactInfoDto accountsContactInfoDto;
     public AccountController(IAccountService iAccountService){
 
         this.iAccountService = iAccountService;
@@ -214,7 +214,7 @@ public class AccountController {
 
     @Operation(
             summary = "Get Java Vesrion",
-            description = "GGet Java Vesrion that is Installed in accounts microservices"
+            description = "Get Java Vesrion that is Installed in accounts microservices"
     )
     @ApiResponses({
             @ApiResponse(
@@ -236,6 +236,31 @@ public class AccountController {
         return ResponseEntity.
                 status(HttpStatus.OK).
                 body(environment.getProperty("JAVA_HOME"));
+    }
+    @Operation(
+            summary = "Get Contact Info",
+            description = "Contact Info details that can be reached out in case of any issue"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status Ok"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+
+    })
+    @GetMapping("/contact-info")
+    public ResponseEntity<AccountsContactInfoDto> getContactInfo(){
+
+        return ResponseEntity.
+                status(HttpStatus.OK).
+                body(accountsContactInfoDto);
     }
 
 }
