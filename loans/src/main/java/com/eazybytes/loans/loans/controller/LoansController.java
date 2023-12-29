@@ -3,6 +3,7 @@ package com.eazybytes.loans.loans.controller;
 
 import com.eazybytes.loans.loans.constants.LoansConstants;
 import com.eazybytes.loans.loans.dto.LoanDto;
+import com.eazybytes.loans.loans.dto.LoansContactInfoDto;
 import com.eazybytes.loans.loans.dto.ResponseDto;
 import com.eazybytes.loans.loans.service.ILoanService;
 import com.eazybytes.loans.loans.service.impl.LoanServiceImpl;
@@ -33,6 +34,9 @@ public class LoansController {
 
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private LoansContactInfoDto loansContactInfoDto;
    public LoansController(ILoanService loanServiceImpl){
        this.loanServiceImpl = loanServiceImpl;
    }
@@ -102,5 +106,12 @@ public class LoansController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @GetMapping("/contact-info")
+    public ResponseEntity<LoansContactInfoDto> getContactInfo(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(loansContactInfoDto);
     }
 }

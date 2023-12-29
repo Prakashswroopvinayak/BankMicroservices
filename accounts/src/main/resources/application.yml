@@ -19,3 +19,12 @@ spring:
 
 build:
   version: "1.0"
+
+accounts:
+  message: "Welcome to PrakashBank accounts related local APIS"
+  contactDetails:
+    name: "Prakash Swaroop Vinayak"
+    email: "tiwariprakash965@gmail.com"
+  onCallSupport:
+    - 9113434141
+    - 9113434142
