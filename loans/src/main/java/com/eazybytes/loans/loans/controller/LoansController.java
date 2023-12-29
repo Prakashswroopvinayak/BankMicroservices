@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,13 +21,16 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
 @Validated
 public class LoansController {
 
    private ILoanService loanServiceImpl;
+   public LoansController(ILoanService loanServiceImpl){
+       this.loanServiceImpl = loanServiceImpl;
+   }
+   @Value("${build.version}")
+   private String buildVersion;
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createAccount(@Valid @RequestParam
                                                          @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digit")
@@ -77,5 +82,12 @@ public class LoansController {
                      .status(HttpStatus.EXPECTATION_FAILED)
                      .body(new ResponseDto(LoansConstants.MESSAGE_417_DELETE,LoansConstants.STATUS_417));
          }
+    }
+
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(buildVersion);
     }
 }

@@ -8,6 +8,7 @@ import com.eazybytes.cards.service.ICardService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -19,12 +20,17 @@ import java.awt.*;
 
 @RestController
 @RequestMapping(path = "/api", produces = {MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
 @Validated
 public class CardController {
 
 
+
     private ICardService cardServiceImpl;
+    @Value("${build.version}")
+    private String buildVersion;
+    public CardController(ICardService cardServiceImpl){
+        this.cardServiceImpl = cardServiceImpl;
+    }
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createCard(@Valid @RequestParam
                                                       @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digit")
@@ -79,5 +85,13 @@ public class CardController {
         }
 
 
+    }
+
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo(){
+
+        return  ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(buildVersion);
     }
 }

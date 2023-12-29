@@ -16,6 +16,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,20 +27,28 @@ import org.springframework.web.bind.annotation.*;
 
 
 // we have created account servics for post request
-@RestController
+
 @RequestMapping(path="/api", produces={MediaType.APPLICATION_JSON_VALUE})
-@AllArgsConstructor
 @Validated
 @Tag(
         name = "CRUD REST API for Accounts in EazyBank",
         description = "CRUD REST API in EazyBank to CREATE, UPDATE, FETCH and DELETE account details"
 
 )
+
+@RestController
 public class AccountController {
 
 
     private IAccountService iAccountService;
+    @Autowired
+    public AccountController(IAccountService iAccountService){
 
+        this.iAccountService = iAccountService;
+    }
+
+    @Value("${build.version}")
+    private String  buildVersion;
     @Operation(
             summary = "Create Account REST API",
             description = "REST API to create new Customer and Account inside Prakash Bank"
@@ -166,6 +177,32 @@ public class AccountController {
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(AccountsConstants.STATUS_417,AccountsConstants.MESSAGE_417_DELETE));
         }
+    }
+
+    @Operation(
+            summary = "Get Build information",
+            description = "Get Build information that is deployed in accounts microservices"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "HTTP Status Ok"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "HTTP Status Internal Error",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorResponseDto.class)
+                    )
+            )
+
+    })
+    @GetMapping("/build-info")
+    public ResponseEntity<String> getBuildInfo(){
+
+        return ResponseEntity.
+                    status(HttpStatus.OK).
+                    body(buildVersion);
     }
 
 }
