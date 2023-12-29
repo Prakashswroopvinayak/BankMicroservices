@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: "qa"
+
+
+build:
+  version: "2.0"
+loans:
+  message: "Welcome to PrakashBank loans related QA APIS"
+  contactDetails:
+    name: "Swaroop QA Lead"
+    email: "tiwariprakashqa965@gmail.com"
+  onCallSupport:
+    - 9113434144
+    - 9113434145

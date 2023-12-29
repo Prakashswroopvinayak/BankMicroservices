@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: "qa"
+
+build:
+  version: "2.0"
+
+cards:
+  message: "Welcome to Prakash cards related QA APIs "
+  contactDetails:
+    name: "Prakash  Vinayak"
+    email: "tiwariprakashqa965@gmail.com"
+  onCallSupport:
+    - 9113434143
+    - 9113434144

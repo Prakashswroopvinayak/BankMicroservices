@@ -16,9 +16,16 @@ spring:
     hibernate:
       ddl-auto: update
       show-sql: true
+  profiles:
+    active:
+      - "qa"
+  config:
+    import:
+      - "application_qa.yml"
+      - "application_prod.yml"
 
 build:
-  version: "1.0"
+  version: "3.0"
 
 loans:
   message: "Welcome to Prakash Loans related local APIs "
